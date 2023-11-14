@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -13,9 +16,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien', 'oneIntervention', 'oneProfession'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -28,13 +33,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien'])]
     private ?string $lastName = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['allTechniciens', 'oneTechnicien'])]
     private ?Profession $profession = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Intervention::class)]
+    #[Groups(['oneTechnicien'])]
+    private Collection $interventions;
+
+    public function __construct()
+    {
+        $this->interventions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,6 +155,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfession(?Profession $profession): static
     {
         $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            // set the owning side to null (unless already changed)
+            if ($intervention->getUser() === $this) {
+                $intervention->setUser(null);
+            }
+        }
 
         return $this;
     }
