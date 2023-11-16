@@ -37,7 +37,9 @@ class InterventionController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $date = new DateTime($data['date']);
         $information = $data['information'];
+        $title = $data["title"];
         $state = "En cours";
+
 
         $client = $this->client->find($data['client']);
         $user = $this->user->find($data['user']);
@@ -48,7 +50,8 @@ class InterventionController extends AbstractController
             ->setInformation($information)
             ->setState($state)
             ->setClient($client)
-            ->setUser($user);
+            ->setUser($user)
+            ->setTitle($title);
 
         $this->manager->persist($intervention);
         $this->manager->flush();
@@ -78,5 +81,63 @@ class InterventionController extends AbstractController
         $intervention = $this->intervention->find($id);
 
         return $this->json($intervention, 200, [], ['groups' => 'oneIntervention']);
+    }
+
+    //Modifier une intervention
+    #[Route('api/intervention/{id}', name: 'edit_intervention', methods: ['PUT'])]
+    public function editIntervention($id, Request $request): Response
+    {
+
+        $data = json_decode($request->getContent(), true);
+        $intervention = $this->intervention->find($id);
+
+        if (isset($data["date"])) {
+            new DateTime($data['date']);
+            if ($data["date"] !== $intervention->getDate()) {
+                $intervention->setDate($data["date"]);
+            }
+        }
+        if (isset($data["information"])) {
+            if ($data["information"] !== $intervention->getInformation()) {
+                $intervention->setInformation($data["information"]);
+            }
+        }
+        if (isset($data["state"])) {
+            if ($data["state"] !== $intervention->getState()) {
+                $intervention->setState($data["state"]);
+            }
+        }
+        if (isset($data["title"])) {
+            if ($data["title"] !== $intervention->getTitle()) {
+                $intervention->setTitle($data["title"]);
+            }
+        }
+
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Profession modifier'
+            ]
+        );
+    }
+
+
+    //Supprime une intervention
+    #[Route('/api/intervention/{id}', name: 'delete_intervention', methods: 'DELETE')]
+    public function deleteIntervention($id): Response
+    {
+        $intervention = $this->intervention->find($id);
+
+        $this->manager->remove($intervention);
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Intervention supprimer'
+            ]
+        );
     }
 }

@@ -162,6 +162,67 @@ class UserController extends AbstractController
         );
     }
 
+    //Modifier un user
+    #[Route('api/user/{id}', name: 'edit_user', methods: ['PUT'])]
+    public function editUser($id, Request $request): Response
+    {
+
+        $data = json_decode($request->getContent(), true);
+        $user = $this->user->find($id);
+
+        if (isset($data["firstName"])) {
+            if ($data["firstName"] !== $user->getFirstName()) {
+                $user->setFirstName($data["firstName"]);
+            }
+        }
+        if (isset($data["lastName"])) {
+            if ($data["lastName"] !== $user->getLastName()) {
+                $user->setLastName($data["lastName"]);
+            }
+        }
+        if (isset($data["email"])) {
+            if ($data["email"] !== $user->getEmail()) {
+                $user->getEmail($data["email"]);
+            }
+        }
+        if (isset($data["password"])) {
+            if (sha1($data["password"]) !== $user->getPassword()) {
+                $user->setPassword(sha1($data["password"]));
+            }
+        }
+        if (isset($data["profession"])) {
+            if ($data["profession"] !== $user->getProfession()) {
+                $user->setProfession($data["profession"]);
+            }
+        }
+
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'User modifier'
+            ]
+        );
+    }
+
+    //Supprime un user
+    #[Route('/api/user/{id}', name: 'delete_user', methods: 'DELETE')]
+    public function deleteUser($id): Response
+    {
+        $user = $this->user->find($id);
+
+        $this->manager->remove($user);
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'User supprimer'
+            ]
+        );
+    }
+
     #[Route('/api/testConnection', name: 'app_testConnection')]
     public function testConnection(): Response
     {
@@ -175,17 +236,5 @@ class UserController extends AbstractController
 
             return $this->json('connecté en tant que ' . $user->getEmail());
         }
-    }
-
-    //Supprime un user
-    #[Route('/api/deleteUser', name: 'delete_user', methods: 'DELETE')]
-    public function deleteUser(): Response
-    {
-        return new JsonResponse(
-            [
-                'status' => false,
-                'message' => 'User supprimer'
-            ]
-        );
     }
 }

@@ -56,12 +56,53 @@ class ProfessionController extends AbstractController
         return $this->json($professions, 200, [], ['groups' => 'allProfessions']);
     }
 
-    //Liste des professions
+    //Liste d'une profession
     #[Route('/api/profession/{id}', name: 'get_one_profession', methods: 'GET')]
     public function getOneProfession($id): Response
     {
         $profession = $this->profession->find($id);
 
         return $this->json($profession, 200, [], ['groups' => 'oneProfession']);
+    }
+
+    //Modifier une profession
+    #[Route('api/profession/{id}', name: 'edit_profession', methods: ['PUT'])]
+    public function editProfession($id, Request $request): Response
+    {
+
+        $data = json_decode($request->getContent(), true);
+        $profession = $this->profession->find($id);
+
+        if (isset($data["name"])) {
+            if ($data["name"] !== $profession->getName()) {
+                $profession->setName($data["name"]);
+            }
+        }
+
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Profession modifier'
+            ]
+        );
+    }
+
+    //Supprime une profession
+    #[Route('/api/profession/{id}', name: 'delete_profession', methods: 'DELETE')]
+    public function deleteProfession($id): Response
+    {
+        $profession = $this->profession->find($id);
+
+        $this->manager->remove($profession);
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'User supprimer'
+            ]
+        );
     }
 }

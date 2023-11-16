@@ -83,4 +83,75 @@ class ClientController extends AbstractController
 
         return $this->json($client, 200, [], ['groups' => 'oneClient']);
     }
+
+    //Modifier une client
+    #[Route('api/client/{id}', name: 'edit_client', methods: ['PUT'])]
+    public function editClient($id, Request $request): Response
+    {
+
+        $data = json_decode($request->getContent(), true);
+        $client = $this->client->find($id);
+
+        if (isset($data["firstName"])) {
+            if ($data["firstName"] !== $client->getFirstName()) {
+                $client->setFirstName($data["firstName"]);
+            }
+        }
+        if (isset($data["lastName"])) {
+            if ($data["lastName"] !== $client->getLastName()) {
+                $client->setLastName($data["lastName"]);
+            }
+        }
+        if (isset($data["email"])) {
+            if ($data["email"] !== $client->getEmail()) {
+                $client->setEmail($data["email"]);
+            }
+        }
+        if (isset($data["phone"])) {
+            if ($data["phone"] !== $client->getPhone()) {
+                $client->setPhone($data["phone"]);
+            }
+        }
+        if (isset($data["address"])) {
+            if ($data["address"] !== $client->getAddress()) {
+                $client->setAddress($data["address"]);
+            }
+        }
+        if (isset($data["information"])) {
+            if ($data["information"] !== $client->getInformation()) {
+                $client->setInformation($data["information"]);
+            }
+        }
+        if (isset($data["state"])) {
+            if ($data["state"] !== $client->getState()) {
+                $client->setState($data["state"]);
+            }
+        }
+
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Client modifier'
+            ]
+        );
+    }
+
+    //Supprime une client
+    #[Route('/api/client/{id}', name: 'delete_client', methods: 'DELETE')]
+    public function deleteClient($id): Response
+    {
+        $client = $this->client->find($id);
+
+        $this->manager->remove($client);
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Client supprimer'
+            ]
+        );
+    }
 }

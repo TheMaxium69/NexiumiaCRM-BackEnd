@@ -76,4 +76,76 @@ class AgencyController extends AbstractController
 
         return $this->json($agency, 200, [], ['groups' => 'oneAgency']);
     }
+
+    //Modifier une agence
+    #[Route('api/agency/{id}', name: 'edit_agency', methods: ['PUT'])]
+    public function editAgency($id, Request $request): Response
+    {
+
+        $data = json_decode($request->getContent(), true);
+        $agency = $this->agency->find($id);
+
+        if (isset($data["name"])) {
+            if ($data["name"] !== $agency->getName()) {
+                $agency->setName($data["name"]);
+            }
+        }
+        if (isset($data["siret"])) {
+            if ($data["siret"] !== $agency->getSiret()) {
+                $agency->setSiret($data["siret"]);
+            }
+        }
+        if (isset($data["path"])) {
+            if ($data["path"] !== $agency->getPath()) {
+                $agency->setPath($data["path"]);
+            }
+        }
+        if (isset($data["color"])) {
+            if ($data["color"] !== $agency->getColor()) {
+                $agency->setColor($data["color"]);
+            }
+        }
+        if (isset($data["email"])) {
+            if ($data["email"] !== $agency->getEmail()) {
+                $agency->setEmail($data["email"]);
+            }
+        }
+        if (isset($data["phone"])) {
+            if ($data["phone"] !== $agency->getPhone()) {
+                $agency->setPhone($data["phone"]);
+            }
+        }
+        if (isset($data["tva"])) {
+            if ($data["tva"] !== $agency->getTva()) {
+                $agency->setTva($data["tva"]);
+            }
+        }
+
+
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Agence modifier'
+            ]
+        );
+    }
+
+    //Supprime une agence
+    #[Route('/api/agency/{id}', name: 'delete_agency', methods: 'DELETE')]
+    public function deleteAgency($id): Response
+    {
+        $agency = $this->agency->find($id);
+
+        $this->manager->remove($agency);
+        $this->manager->flush();
+
+        return new JsonResponse(
+            [
+                'status' => true,
+                'message' => 'Agence supprimer'
+            ]
+        );
+    }
 }
