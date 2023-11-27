@@ -47,7 +47,7 @@ class Client
     private ?string $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
-    #[Groups(['oneClient'])]
+    #[Groups(['allClients', 'oneClient'])]
     private ?Agency $agency = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Intervention::class)]
