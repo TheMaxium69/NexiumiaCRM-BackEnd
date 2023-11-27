@@ -38,7 +38,7 @@ class ClientController extends AbstractController
         $phone = $data['phone'];
         $address = $data['address'];
         $information = $data['information'];
-        $state = "Prospet";
+        $state = $data['state'];
 
         $agency = $this->agency->find($data['agency']);
 

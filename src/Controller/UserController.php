@@ -93,10 +93,16 @@ class UserController extends AbstractController
         } else {
             $user = new User();
 
+
+            $clef = "Tyrolium";
+
+            $salt =  md5($clef);
+            $passwordHashed = sha1($password . $salt);
+
             $user->setFirstName($firstName)
                 ->setLastName($lastName)
                 ->setEmail($email)
-                ->setPassword(sha1($password))
+                ->setPassword($passwordHashed)
                 ->setRoles(['ROLE_ADMIN']);
 
             $this->manager->persist($user);
@@ -243,8 +249,12 @@ class UserController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $password = $data['password'];
-        $passwordHash = sha1($password);
 
-        return $this->json($passwordHash);
+        $clef = "Tyrolium";
+
+        $salt =  md5($clef);
+        $passwordHashed = sha1($password . $salt);
+
+        return $this->json($passwordHashed);
     }
 }
