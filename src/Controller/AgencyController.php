@@ -53,7 +53,8 @@ class AgencyController extends AbstractController
         return new JsonResponse(
             [
                 'status' => true,
-                'message' => 'Agence créé avec succès'
+                'message' => 'Agence créé avec succès',
+                'agency'=>$agency
             ]
 
         );

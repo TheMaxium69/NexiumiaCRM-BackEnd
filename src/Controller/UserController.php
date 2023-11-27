@@ -237,4 +237,14 @@ class UserController extends AbstractController
             return $this->json('connecté en tant que ' . $user->getEmail());
         }
     }
+
+    #[Route('/api/hashMdp', name: 'app_hashConnection', methods: 'POST')]
+    public function hashMdp(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $password = $data['password'];
+        $passwordHash = sha1($password);
+
+        return $this->json($passwordHash);
+    }
 }
