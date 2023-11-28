@@ -244,6 +244,30 @@ class UserController extends AbstractController
         }
     }
 
+    #[Route('/api/token', name: 'app_token')]
+    public function token(): Response
+    {
+        /**@var User $user  */
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
+        foreach ($roles as $role) {
+            if ($role == "ROLE_TECHNICIEN") {
+                return $this->json($user, 200, [], ['groups' => 'oneTechnicien']);
+            } else if ($role == "ROLE_ADMIN") {
+                return $this->json($user, 200, [], ['groups' => 'oneAdmin']);
+            }
+        }
+
+        return new JsonResponse(
+            [
+                'status' => false,
+                'message' => 'Erreur'
+            ]
+        );
+
+    }
+
     #[Route('/api/hashMdp', name: 'app_hashConnection', methods: 'POST')]
     public function hashMdp(Request $request): Response
     {

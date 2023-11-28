@@ -46,7 +46,7 @@ class Agency
     private ?string $tva = null;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Client::class)]
-    #[Groups(['oneAgency'])]
+    #[Groups(['allAgencies', 'oneAgency'])]
     private Collection $clients;
 
     public function __construct()
