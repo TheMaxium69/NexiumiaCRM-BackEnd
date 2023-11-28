@@ -24,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['allUsers'])]
     private array $roles = [];
 
     /**
@@ -41,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['allTechniciens', 'oneTechnicien'])]
+    #[Groups(['allUsers', 'allTechniciens', 'oneTechnicien'])]
     private ?Profession $profession = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Intervention::class)]

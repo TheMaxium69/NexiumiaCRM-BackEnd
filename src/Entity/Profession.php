@@ -14,11 +14,11 @@ class Profession
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['allProfessions', 'allTechniciens', 'oneTechnicien', 'oneProfession'])]
+    #[Groups(['allUsers', 'allProfessions', 'allTechniciens', 'oneTechnicien', 'oneProfession'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allProfessions', 'oneProfession'])]
+    #[Groups(['allUsers', 'allProfessions', 'oneProfession'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'profession', targetEntity: User::class)]
