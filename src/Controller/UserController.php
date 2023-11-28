@@ -30,12 +30,15 @@ class UserController extends AbstractController
     #[Route('/api/createTechnicien', name: 'create_technicien', methods: 'POST')]
     public function createTechnicien(Request $request): Response
     {
+
         $data = json_decode($request->getContent(), true);
         $firstName = $data['firstName'];
         $lastName = $data['lastName'];
         $email = $data['email'];
-        $password = $data['password'];
         $profession = $this->profession->find($data['profession']);
+
+        //GENER MOTS DE PASSE
+        $password = md5($firstName.$lastName);
 
         //Vérifier si l'email existe déjà
         $email_exist = $this->user->findOneByEmail($email);
@@ -50,10 +53,15 @@ class UserController extends AbstractController
         } else {
             $user = new User();
 
+            $clef = "Tyrolium";
+
+            $salt =  md5($clef);
+            $passwordHashed = sha1($password . $salt);
+
             $user->setFirstName($firstName)
                 ->setLastName($lastName)
                 ->setEmail($email)
-                ->setPassword(sha1($password))
+                ->setPassword($passwordHashed)
                 ->setProfession($profession)
                 ->setRoles(['ROLE_TECHNICIEN']);
 
@@ -79,7 +87,10 @@ class UserController extends AbstractController
         $firstName = $data['firstName'];
         $lastName = $data['lastName'];
         $email = $data['email'];
-        $password = $data['password'];
+
+        //GENER MOTS DE PASSE
+        $password = md5($firstName.$lastName);
+
         //Vérifier si l'email existe déjà
         $email_exist = $this->user->findOneByEmail($email);
 
@@ -92,7 +103,6 @@ class UserController extends AbstractController
             );
         } else {
             $user = new User();
-
 
             $clef = "Tyrolium";
 
