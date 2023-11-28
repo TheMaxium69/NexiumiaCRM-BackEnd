@@ -54,7 +54,7 @@ class AgencyController extends AbstractController
             [
                 'status' => true,
                 'message' => 'Agence créé avec succès',
-                'agency'=>$agency
+                'agency' => $agency
             ]
 
         );
@@ -148,5 +148,22 @@ class AgencyController extends AbstractController
                 'message' => 'Agence supprimer'
             ]
         );
+    }
+
+
+
+    #[Route('/api/agency/{id}/img', name: 'delete_agency', methods: 'PUT')]
+    public function uploadImage($id, Request $request)
+    {
+        $data = ($request->getContent());
+
+        // $newFilename = uniqid() . '.' . $data->guessExtension();
+
+        $agency = $this->agency->find($id);
+
+        $imageFile = $data;
+
+
+        return $this->json($data['path']);
     }
 }
