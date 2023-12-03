@@ -16,7 +16,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien', 'oneIntervention', 'oneProfession'])]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien', 'oneIntervention', 'oneProfession','allInterventions'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -34,11 +34,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien'])]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien','allInterventions'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien'])]
+    #[Groups(['allUsers', 'allTechniciens', 'allAdmins', 'oneAdmin', 'oneTechnicien','allInterventions'])]
     private ?string $lastName = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Profession $profession = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Intervention::class)]
-    #[Groups(['oneTechnicien'])]
+    #[Groups(['oneTechnicien', 'oneAdmin'])]
     private Collection $interventions;
 
     public function __construct()

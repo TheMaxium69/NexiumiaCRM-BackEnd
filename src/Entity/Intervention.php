@@ -13,31 +13,31 @@ class Intervention
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien'])]
+    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['allInterventions', 'oneIntervention'])]
+    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['allInterventions', 'oneIntervention'])]
+    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
     private ?string $information = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allInterventions', 'oneIntervention'])]
+    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
     private ?string $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
-    #[Groups(['oneIntervention'])]
+    #[Groups(['oneIntervention','allInterventions', 'oneTechnicien', 'oneAdmin'])]
     private ?Client $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
-    #[Groups(['oneIntervention'])]
+    #[Groups(['oneIntervention','allInterventions'])]
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allInterventions', 'oneIntervention'])]
+    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
     private ?string $title = null;
 
     public function getId(): ?int

@@ -15,31 +15,31 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['allClients', 'oneIntervention', 'oneClient', 'oneAgency', 'allAgencies'])]
+    #[Groups(['allClients', 'oneIntervention', 'oneClient', 'oneAgency', 'allAgencies', 'allInterventions', 'oneTechnicien', 'oneAdmin'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?string $address = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?string $information = null;
 
     #[ORM\Column(length: 255)]
@@ -47,7 +47,7 @@ class Client
     private ?string $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
-    #[Groups(['allClients', 'oneClient'])]
+    #[Groups(['allClients', 'oneClient', 'oneTechnicien', 'oneAdmin'])]
     private ?Agency $agency = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Intervention::class)]

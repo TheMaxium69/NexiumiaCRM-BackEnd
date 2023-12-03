@@ -37,8 +37,8 @@ class InterventionController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $date = new DateTime($data['date']);
         $information = $data['information'];
-        $title = $data["title"];
-        $state = "En cours";
+        $title = $data["title"]; // 1 = appel | 2 = intervention
+        $state = "1";
 
 
         $client = $this->client->find($data['client']);

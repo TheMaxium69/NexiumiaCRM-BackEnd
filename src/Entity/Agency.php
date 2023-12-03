@@ -14,11 +14,11 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients'])]
+    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients', 'oneTechnicien', 'oneAdmin'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients'])]
+    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients', 'oneTechnicien', 'oneAdmin'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
@@ -26,11 +26,11 @@ class Agency
     private ?string $siret = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients'])]
+    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients', 'oneTechnicien', 'oneAdmin'])]
     private ?string $path = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients'])]
+    #[Groups(['allAgencies', 'oneAgency', 'oneClient', 'allClients', 'oneTechnicien', 'oneAdmin'])]
     private ?string $color = null;
 
     #[ORM\Column(length: 255)]
