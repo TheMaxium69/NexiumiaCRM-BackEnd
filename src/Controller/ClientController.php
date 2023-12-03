@@ -59,6 +59,7 @@ class ClientController extends AbstractController
         return new JsonResponse(
             [
                 'status' => true,
+                'id' => $client->getId(),
                 'message' => 'Client créé avec succès'
             ]
 
