@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\LicenceRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,12 +19,14 @@ class UserController extends AbstractController
     private $manager;
     private $user;
     private $profession;
+    private $licence;
 
-    public function __construct(EntityManagerInterface $manager, UserRepository $user, ProfessionRepository $profession)
+    public function __construct(EntityManagerInterface $manager, UserRepository $user, ProfessionRepository $profession, LicenceRepository $licence)
     {
         $this->manager = $manager;
         $this->user = $user;
         $this->profession = $profession;
+        $this->licence = $licence;
     }
 
     //Création d'un technicien
@@ -114,6 +117,11 @@ class UserController extends AbstractController
                 ->setEmail($email)
                 ->setPassword($passwordHashed)
                 ->setRoles(['ROLE_ADMIN']);
+
+            $licenceUsers = $this->licence->find(1);
+
+            $NbLicenceUsers = $licenceUsers->getNb();
+            $licenceUsers->setNb($NbLicenceUsers - 1);
 
             $this->manager->persist($user);
             $this->manager->flush();
@@ -227,6 +235,10 @@ class UserController extends AbstractController
     public function deleteUser($id): Response
     {
         $user = $this->user->find($id);
+        $licenceUsers = $this->licence->find(1);
+
+        $NbLicenceUsers = $licenceUsers->getNb();
+        $licenceUsers->setNb($NbLicenceUsers + 1);
 
         $this->manager->remove($user);
         $this->manager->flush();

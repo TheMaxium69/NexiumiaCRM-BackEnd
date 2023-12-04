@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231114145759 extends AbstractMigration
+final class Version20231204033920 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20231114145759 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE intervention DROP INDEX UNIQ_D11814ABA76ED395, ADD INDEX IDX_D11814ABA76ED395 (user_id)');
-        $this->addSql('ALTER TABLE intervention ADD title VARCHAR(255) NOT NULL');
+        $this->addSql('CREATE TABLE licence (id INT AUTO_INCREMENT NOT NULL, content VARCHAR(255) NOT NULL, nb INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE intervention DROP INDEX IDX_D11814ABA76ED395, ADD UNIQUE INDEX UNIQ_D11814ABA76ED395 (user_id)');
-        $this->addSql('ALTER TABLE intervention DROP title');
+        $this->addSql('DROP TABLE licence');
     }
 }

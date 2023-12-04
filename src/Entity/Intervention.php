@@ -40,6 +40,10 @@ class Intervention
     #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
     private ?string $title = null;
 
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups(['allInterventions', 'oneIntervention', 'oneTechnicien', 'oneAdmin'])]
+    private ?\DateTimeInterface $duration = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -113,6 +117,18 @@ class Intervention
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getDuration(): ?\DateTimeInterface
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(\DateTimeInterface $duration): static
+    {
+        $this->duration = $duration;
 
         return $this;
     }

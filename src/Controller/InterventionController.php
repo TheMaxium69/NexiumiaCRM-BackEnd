@@ -39,6 +39,7 @@ class InterventionController extends AbstractController
         $information = $data['information'];
         $title = $data["title"]; // 1 = appel | 2 = intervention
         $state = "1";
+        $duration =  new DateTime($data["duration"]);
 
 
         $client = $this->client->find($data['client']);
@@ -51,7 +52,8 @@ class InterventionController extends AbstractController
             ->setState($state)
             ->setClient($client)
             ->setUser($user)
-            ->setTitle($title);
+            ->setTitle($title)
+            ->setDuration($duration);
 
         $this->manager->persist($intervention);
         $this->manager->flush();
